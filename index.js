@@ -1,8 +1,11 @@
 import express from "express";
 import bodyParser from "body-parser";
+import dotenv from "dotenv";
 
 const app = express();
 const port = 3000;
+
+dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
