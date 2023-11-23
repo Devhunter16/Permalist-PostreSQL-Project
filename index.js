@@ -51,7 +51,7 @@ app.post("/add", async (req, res) => {
   // Inserting "item" into our items table
   try {
     await db.query(
-      "INSERT INTO items (title) VALUES ($1)",
+      "INSERT INTO items (title) VALUES ($1);",
       [item]
     );
     // Redirecting to our home page
@@ -68,7 +68,7 @@ app.post("/edit", async (req, res) => {
   // Updating a table entry
   try {
     await db.query(
-      'UPDATE items SET title = $1 WHERE id = $2',
+      "UPDATE items SET title = $1 WHERE id = $2;",
       [updatedItemTitle, updatedItemId]
     );
     // Redirecting to our home page
@@ -79,7 +79,23 @@ app.post("/edit", async (req, res) => {
   };
 });
 
-app.post("/delete", (req, res) => { });
+app.post("/delete", async (req, res) => {
+  const deleteItemId = req.body.deleteItemId;
+  console.log(deleteItemId);
+
+  try {
+    await db.query(
+      "DELETE FROM items WHERE id = $1;",
+      [deleteItemId]
+    );
+    // Redirecting to our home page
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  };
+
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
